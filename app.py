@@ -303,7 +303,7 @@ elif st.session_state.page == 2:
             timestamp
         ]
 
-        sheet.append_row(data)
+     sheet.append_row(data)
 
         st.session_state.score = score
         st.session_state.page = 3
