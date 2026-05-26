@@ -307,7 +307,7 @@ elif st.session_state.page == 2:
     st.session_state.score = score
     st.session_state.page = 3
 
-     st.rerun()
+    st.rerun()
 
 # =========================================================
 # PAGE 3 - THANK YOU PAGE
