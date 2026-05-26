@@ -2,6 +2,25 @@ import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+from PIL import Image, ImageDraw, ImageFont
+import io
+
+def generate_certificate(name, score):
+    img = Image.new('RGB', (1000, 700), color=(245, 250, 255))
+    draw = ImageDraw.Draw(img)
+
+    font = ImageFont.load_default()
+
+    draw.rectangle([(20, 20), (980, 680)], outline="black", width=3)
+
+    draw.text((380, 80), "CERTIFICATE", fill="black", font=font)
+    draw.text((300, 180), "This is to certify that", fill="black", font=font)
+    draw.text((380, 260), str(name), fill="blue", font=font)
+    draw.text((200, 340), "has successfully completed the FinSafe Quiz", fill="black", font=font)
+    draw.text((400, 420), f"Score: {score}", fill="green", font=font)
+    draw.text((300, 550), "FinSafe India", fill="gray", font=font)
+
+    return img
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
@@ -320,6 +339,22 @@ elif st.session_state.page == 3:
     st.success(
         f"Your Score: {st.session_state.score} / 15"
     )
+    if st.button("🎓 Generate Certificate"):
+    cert_img = generate_certificate(
+        st.session_state.name,
+        st.session_state.score
+    )
+
+    buf = io.BytesIO()
+    cert_img.save(buf, format="PNG")
+    byte_im = buf.getvalue()
+
+    st.download_button(
+        "📥 Download Certificate",
+        data=byte_im,
+        file_name="FinSafe_Certificate.png",
+        mime="image/png"
+    )
 
     if st.session_state.score >= 13:
 
@@ -343,6 +378,7 @@ elif st.session_state.page == 3:
             "You should improve your awareness about "
             "financial literacy and cyber fraud prevention."
         )
+        
 
     st.info(
         "Together we can build a financially aware "
