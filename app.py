@@ -2,6 +2,7 @@ import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import pytz
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
@@ -291,7 +292,8 @@ elif st.session_state.page == 2:
 
     if st.button("✅ Submit Quiz"):
 
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      ist = pytz.timezone('Asia/Kolkata')
+timestamp = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
 
         data = [
             st.session_state.name,
