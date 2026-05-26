@@ -294,9 +294,9 @@ elif st.session_state.page == 2:
 
       from datetime import datetime, timezone, timedelta
 
-   ist = timezone(timedelta(hours=5, minutes=30))
-   timestamp = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
-   data = [
+    ist = timezone(timedelta(hours=5, minutes=30))
+    timestamp = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
+    data = [
             st.session_state.name,
             st.session_state.mobile,
             st.session_state.email,
