@@ -304,10 +304,10 @@ elif st.session_state.page == 2:
         ]
     sheet.append_row(data)
 
-        st.session_state.score = score
-        st.session_state.page = 3
+    st.session_state.score = score
+    st.session_state.page = 3
 
-        st.rerun()
+     st.rerun()
 
 # =========================================================
 # PAGE 3 - THANK YOU PAGE
