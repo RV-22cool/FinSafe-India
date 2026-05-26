@@ -1,84 +1,79 @@
-body {
-    background-color: #f4f7fb;
+/* =====================================================
+BACKGROUND
+===================================================== */
+
+.stApp {
+    background: linear-gradient(
+        to bottom right,
+        #f4f8ff,
+        #e6f0ff
+    );
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* Main App Container */
-.main {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 18px;
-}
+/* =====================================================
+HEADINGS
+===================================================== */
 
-/* Main Title */
 h1 {
     color: #003366;
-    text-align: center;
-    font-weight: 800;
-    font-size: 42px;
-}
-
-/* Section Headers */
-h2, h3 {
-    color: #004080;
     font-weight: 700;
 }
 
-/* Buttons */
+h2, h3 {
+    color: #004080;
+}
+
+/* =====================================================
+BUTTONS
+===================================================== */
+
 .stButton > button {
-    background-color: #003366;
+    background-color: #0059b3;
     color: white;
     border-radius: 12px;
-    height: 3.2em;
-    width: 100%;
-    font-size: 18px;
-    font-weight: bold;
     border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
     transition: 0.3s;
 }
 
-/* Button Hover Effect */
 .stButton > button:hover {
-    background-color: #0055aa;
-    color: white;
+    background-color: #0073e6;
+    transform: scale(1.02);
 }
 
-/* Text Input Boxes */
+/* =====================================================
+INPUT BOXES
+===================================================== */
+
 .stTextInput > div > div > input {
     border-radius: 10px;
-    border: 2px solid #cbd5e1;
-    padding: 10px;
 }
 
-/* Text Area */
 .stTextArea textarea {
     border-radius: 10px;
-    border: 2px solid #cbd5e1;
 }
 
-/* Dropdown Boxes */
-.stSelectbox div[data-baseweb="select"] {
+.stNumberInput input {
     border-radius: 10px;
 }
 
-/* Radio Buttons */
-.stRadio {
-    background-color: #f8fafc;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+/* =====================================================
+CARDS
+===================================================== */
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
-/* Info Boxes */
+/* =====================================================
+SUCCESS / INFO BOXES
+===================================================== */
+
 .stAlert {
     border-radius: 12px;
-}
-
-/* Progress Bar */
-.stProgress > div > div > div > div {
-    background-color: #003366;
-}
-
-/* Footer Style */
-footer {
-    visibility: hidden;
 }
