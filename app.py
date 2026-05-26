@@ -3,18 +3,27 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timezone, timedelta
 
-# ---------------- PAGE CONFIG ----------------
+# =====================================================
+# PAGE CONFIG
+# =====================================================
+
 st.set_page_config(
     page_title="FinSafe India",
     page_icon="🏦",
     layout="centered"
 )
 
-# ---------------- LOAD CSS ----------------
+# =====================================================
+# LOAD CSS
+# =====================================================
+
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# ---------------- GOOGLE SHEETS CONNECTION ----------------
+# =====================================================
+# GOOGLE SHEETS CONNECTION
+# =====================================================
+
 scope = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive"
@@ -31,328 +40,490 @@ client = gspread.authorize(creds)
 
 sheet = client.open("FinSafe India Responses").sheet1
 
-# ---------------- SESSION STATE ----------------
+# =====================================================
+# SESSION STATE
+# =====================================================
+
 if "page" not in st.session_state:
     st.session_state.page = 1
 
-if "score" not in st.session_state:
-    st.session_state.score = 0
+if "final_score" not in st.session_state:
+    st.session_state.final_score = 0
 
-# =========================================================
-# PAGE 1 - REGISTRATION
-# =========================================================
+# =====================================================
+# PAGE 1 — REGISTRATION
+# =====================================================
 
 if st.session_state.page == 1:
 
     st.title("🏦 FinSafe India")
-    st.subheader("Financial Literacy & Cyber Fraud Awareness Quiz")
+    st.subheader("Interactive Financial Literacy & Cyber Safety Activity")
 
     st.info(
-        "Test your awareness about digital payments, cyber safety, "
-        "online frauds, and smart financial habits."
+        "Learn about digital safety, fraud awareness, budgeting, "
+        "financial planning, and smart money habits."
     )
 
-    name = st.text_input("👤 Full Name")
-    mobile = st.text_input("📱 Mobile Number")
-    email = st.text_input("📧 Email Address")
+    with st.container():
 
-    education = st.selectbox(
-        "🎓 Education Level",
-        [
-            "School Student",
-            "College Student",
-            "Graduate",
-            "Professional",
-            "Other"
-        ]
-    )
+        name = st.text_input("👤 Full Name")
 
-    if st.button("🚀 Start Quiz"):
+        mobile = st.text_input("📱 Mobile Number")
+
+        email = st.text_input("📧 Email Address")
+
+        education = st.selectbox(
+            "🎓 Education Level",
+            [
+                "School Student",
+                "College Student",
+                "Graduate",
+                "Professional",
+                "Other"
+            ]
+        )
+
+    st.progress(10)
+
+    if st.button("🚀 Start Activity"):
 
         if name == "" or mobile == "" or email == "":
-            st.warning("Please fill all details before proceeding.")
+
+            st.warning("Please fill all details.")
 
         else:
+
             st.session_state.name = name
             st.session_state.mobile = mobile
             st.session_state.email = email
             st.session_state.education = education
 
             st.session_state.page = 2
+
             st.rerun()
 
-# =========================================================
-# PAGE 2 - QUIZ
-# =========================================================
+# =====================================================
+# PAGE 2 — SPOT THE SCAM
+# =====================================================
 
 elif st.session_state.page == 2:
 
-    st.title("🧠 FinSafe Awareness Quiz")
+    st.title("🕵️ Spot the Scam")
 
-    st.progress(0.5)
+    st.progress(30)
 
-    score = 0
+    scam_score = 0
 
-    # -----------------------------------------------------
-    # SECTION 1 - MCQs
-    # -----------------------------------------------------
+    st.markdown("### 📩 Case 1")
 
-    st.header("📘 Section 1: Multiple Choice Questions")
+    st.warning(
+        "Your bank account will be blocked. "
+        "Click this link and update your KYC immediately."
+    )
 
-    q1 = st.radio(
-        "1. What does OTP stand for?",
+    c1 = st.radio(
+        "Is this fraud?",
+        ["Yes", "No"],
+        key="c1"
+    )
+
+    red1 = st.multiselect(
+        "Select red flags",
         [
-            "One Time Password",
-            "Online Transaction Process",
-            "Official Transfer Password"
+            "Urgent pressure",
+            "Unknown link",
+            "KYC threat",
+            "Official RBI notice"
         ]
     )
 
-    if q1 == "One Time Password":
-        score += 1
+    action1 = st.text_area(
+        "What should you do?",
+        key="action1"
+    )
 
-    q2 = st.radio(
-        "2. Which organization regulates banks in India?",
+    if c1:
+        scam_score += 1
+
+    if len(red1) >= 2:
+        scam_score += 1
+
+    if len(action1) > 5:
+        scam_score += 1
+
+    # -------------------------------------------------
+
+    st.markdown("### ☎️ Case 2")
+
+    st.warning(
+        "You won ₹25 lakh lottery. "
+        "Pay ₹5,000 processing fee to claim."
+    )
+
+    c2 = st.radio(
+        "Is this fraud?",
+        ["Yes", "No"],
+        key="c2"
+    )
+
+    red2 = st.multiselect(
+        "Select red flags",
         [
-            "SEBI",
-            "RBI",
-            "IRCTC"
+            "Lottery scam",
+            "Advance payment request",
+            "Unknown caller",
+            "Official RBI message"
         ]
     )
 
-    if q2 == "RBI":
-        score += 1
+    action2 = st.text_area(
+        "What should you do?",
+        key="action2"
+    )
 
-    q3 = st.radio(
-        "3. Which of the following passwords is strongest?",
+    if c2:
+        scam_score += 1
+
+    if len(red2) >= 2:
+        scam_score += 1
+
+    if len(action2) > 5:
+        scam_score += 1
+
+    # -------------------------------------------------
+
+    if st.button("➡️ Next Section"):
+
+        st.session_state.scam_score = scam_score
+        st.session_state.page = 3
+
+        st.rerun()
+
+# =====================================================
+# PAGE 3 — BUDGET CHALLENGE
+# =====================================================
+
+elif st.session_state.page == 3:
+
+    st.title("💰 Budget Challenge")
+
+    st.progress(50)
+
+    budget_score = 0
+
+    st.info(
+        "You earn ₹15,000/month. "
+        "Allocate your expenses wisely."
+    )
+
+    rent = st.number_input("🏠 Rent / Stay", min_value=0)
+
+    food = st.number_input("🍛 Food", min_value=0)
+
+    entertainment = st.number_input("🎬 Entertainment", min_value=0)
+
+    savings = st.number_input("💸 Savings", min_value=0)
+
+    emergency = st.number_input("🚨 Emergency Fund", min_value=0)
+
+    total = (
+        rent
+        + food
+        + entertainment
+        + savings
+        + emergency
+    )
+
+    st.write(f"### Total Used: ₹{total}")
+
+    if total > 15000:
+
+        st.error("⚠️ Budget exceeded!")
+
+    else:
+
+        st.success("✅ Budget managed well!")
+
+    if savings >= 3000:
+        budget_score += 2
+        st.success("🏅 Smart Saver Badge Earned!")
+
+    goal = st.text_input(
+        "🎯 Write one financial goal"
+    )
+
+    if len(goal) > 3:
+        budget_score += 1
+
+    if st.button("➡️ Continue"):
+
+        st.session_state.budget_score = budget_score
+        st.session_state.page = 4
+
+        st.rerun()
+
+# =====================================================
+# PAGE 4 — AWARENESS ACTIVITIES
+# =====================================================
+
+elif st.session_state.page == 4:
+
+    st.title("🎯 Financial Awareness Activities")
+
+    st.progress(70)
+
+    awareness_score = 0
+
+    # -------------------------------------------------
+    # NEED VS WANT
+    # -------------------------------------------------
+
+    st.subheader("🛒 Need vs Want")
+
+    rent_q = st.radio(
+        "Rent",
+        ["Need", "Want"],
+        key="rent_q"
+    )
+
+    iphone_q = st.radio(
+        "New iPhone",
+        ["Need", "Want"],
+        key="iphone_q"
+    )
+
+    groceries_q = st.radio(
+        "Groceries",
+        ["Need", "Want"],
+        key="groceries_q"
+    )
+
+    if rent_q:
+        awareness_score += 1
+
+    if iphone_q:
+        awareness_score += 1
+
+    if groceries_q:
+        awareness_score += 1
+
+    # -------------------------------------------------
+    # RIGHT OR WRONG
+    # -------------------------------------------------
+
+    st.subheader("✅ Right or Wrong")
+
+    otp_q = st.radio(
+        "Sharing OTP is safe",
+        ["Right", "Wrong"],
+        key="otp_q"
+    )
+
+    saving_q = st.radio(
+        "Saving money is important",
+        ["Right", "Wrong"],
+        key="saving_q"
+    )
+
+    invest_q = st.radio(
+        "Investing early is beneficial",
+        ["Right", "Wrong"],
+        key="invest_q"
+    )
+
+    if otp_q:
+        awareness_score += 1
+
+    if saving_q:
+        awareness_score += 1
+
+    if invest_q:
+        awareness_score += 1
+
+    # -------------------------------------------------
+    # MATCH THE PAIR
+    # -------------------------------------------------
+
+    st.subheader("🔗 Match the Pair")
+
+    sip = st.selectbox(
+        "SIP →",
         [
-            "india123",
-            "password@123",
-            "R@8mL#29x!"
+            "Complaint System",
+            "Regular Investment",
+            "Emergency Expenses"
         ]
     )
 
-    if q3 == "R@8mL#29x!":
-        score += 1
-
-    q4 = st.radio(
-        "4. What should you do if you receive a suspicious banking link?",
+    sebi = st.selectbox(
+        "SEBI →",
         [
-            "Click immediately",
-            "Ignore/report it",
-            "Forward to friends"
+            "Market Regulator",
+            "Insurance",
+            "UPI Service"
         ]
     )
 
-    if q4 == "Ignore/report it":
-        score += 1
+    if sip:
+        awareness_score += 1
 
-    q5 = st.radio(
-        "5. UPI PIN should be shared with:",
-        [
-            "Nobody",
-            "Bank manager",
-            "Friends"
-        ]
+    if sebi:
+        awareness_score += 1
+
+    # -------------------------------------------------
+
+    if st.button("➡️ Continue to Final Round"):
+
+        st.session_state.awareness_score = awareness_score
+        st.session_state.page = 5
+
+        st.rerun()
+
+# =====================================================
+# PAGE 5 — RAPID FIRE
+# =====================================================
+
+elif st.session_state.page == 5:
+
+    st.title("⚡ Rapid Fire Round")
+
+    st.progress(90)
+
+    rapid_score = 0
+
+    q1 = st.text_input(
+        "1. App used for quick payments"
     )
 
-    if q5 == "Nobody":
-        score += 1
-
-    q6 = st.radio(
-        "6. Which of these is a sign of online fraud?",
-        [
-            "Urgent request for OTP",
-            "Official RBI poster",
-            "Bank passbook update"
-        ]
+    q2 = st.text_input(
+        "2. Fraud using fake links"
     )
 
-    if q6 == "Urgent request for OTP":
-        score += 1
-
-    # -----------------------------------------------------
-    # SECTION 2 - MATCH THE COLUMNS
-    # -----------------------------------------------------
-
-    st.header("🔗 Section 2: Match the Columns")
-
-    st.write("Match Column A with the correct option from Column B.")
-
-    match1 = st.selectbox(
-        "7. RBI →",
-        [
-            "Digital Payment",
-            "Central Bank",
-            "Security Code"
-        ]
+    q3 = st.text_input(
+        "3. Money saved for future"
     )
 
-    if match1 == "Central Bank":
-        score += 1
-
-    match2 = st.selectbox(
-        "8. OTP →",
-        [
-            "Security Code",
-            "Shopping App",
-            "Bank Branch"
-        ]
+    reflection = st.text_area(
+        "🧠 What is one step you take to stay safe online?"
     )
 
-    if match2 == "Security Code":
-        score += 1
+    if len(q1) > 1:
+        rapid_score += 1
 
-    match3 = st.selectbox(
-        "9. UPI →",
-        [
-            "Digital Payment",
-            "Insurance Policy",
-            "Email Fraud"
-        ]
-    )
+    if len(q2) > 1:
+        rapid_score += 1
 
-    if match3 == "Digital Payment":
-        score += 1
+    if len(q3) > 1:
+        rapid_score += 1
 
-    # -----------------------------------------------------
-    # SECTION 3 - JUMBLED WORDS
-    # -----------------------------------------------------
+    if len(reflection) > 5:
+        rapid_score += 2
 
-    st.header("🔤 Section 3: Jumbled Words")
-
-    q10 = st.text_input(
-        "10. Unscramble: PHSIHING"
-    )
-
-    if q10.lower() == "phishing":
-        score += 1
-
-    q11 = st.text_input(
-        "11. Unscramble: RDUAF"
-    )
-
-    if q11.lower() == "fraud":
-        score += 1
-
-    q12 = st.text_input(
-        "12. Unscramble: CEURTSIY"
-    )
-
-    if q12.lower() == "security":
-        score += 1
-
-    # -----------------------------------------------------
-    # SECTION 4 - CONCEPTUAL QUESTIONS
-    # -----------------------------------------------------
-
-    st.header("🛡 Section 4: Conceptual Awareness")
-
-    q13 = st.radio(
-        "13. A caller says your KYC will expire today unless you share OTP immediately. What should you do?",
-        [
-            "Share OTP immediately",
-            "Disconnect and report fraud",
-            "Share only last digits"
-        ]
-    )
-
-    if q13 == "Disconnect and report fraud":
-        score += 1
-
-    q14 = st.radio(
-        "14. Why is financial literacy important?",
-        [
-            "To avoid scams and manage money wisely",
-            "Only for bankers",
-            "Only for businesses"
-        ]
-    )
-
-    if q14 == "To avoid scams and manage money wisely":
-        score += 1
-
-    # -----------------------------------------------------
-    # SECTION 5 - USER RESPONSE
-    # -----------------------------------------------------
-
-    st.header("✍ Awareness Response")
-
-    q15 = st.text_area(
-        "15. What is one important step you take to stay safe from cyber fraud?"
-    )
-
-    if len(q15) > 5:
-        score += 1
-
-    # -----------------------------------------------------
+    # =================================================
     # SUBMIT BUTTON
-    # -----------------------------------------------------
+    # =================================================
 
-    if st.button("✅ Submit Quiz"):
+    if st.button("✅ Submit Activity"):
 
-      from datetime import datetime, timezone, timedelta
+        final_score = (
+            st.session_state.scam_score
+            + st.session_state.budget_score
+            + st.session_state.awareness_score
+            + rapid_score
+        )
 
-    ist = timezone(timedelta(hours=5, minutes=30))
-    timestamp = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
-    data = [
+        st.session_state.final_score = final_score
+
+        # =============================================
+        # TIMESTAMP
+        # =============================================
+
+        ist = timezone(timedelta(hours=5, minutes=30))
+
+        timestamp = datetime.now(ist).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+        # =============================================
+        # GOOGLE SHEET DATA
+        # =============================================
+
+        data = [
+            timestamp,
             st.session_state.name,
             st.session_state.mobile,
             st.session_state.email,
             st.session_state.education,
-            score,
-            timestamp
+            st.session_state.scam_score,
+            st.session_state.budget_score,
+            st.session_state.awareness_score,
+            rapid_score,
+            final_score,
+            reflection
         ]
-    sheet.append_row(data)
 
-    st.session_state.score = score
-    st.session_state.page = 3
+        sheet.append_row(data)
 
-    st.rerun()
+        st.session_state.page = 6
 
-# =========================================================
-# PAGE 3 - THANK YOU PAGE
-# =========================================================
+        st.rerun()
 
-elif st.session_state.page == 3:
+# =====================================================
+# PAGE 6 — FINAL RESULT
+# =====================================================
 
-    st.title("🎉 Thank You for Participating!")
+elif st.session_state.page == 6:
+
+    st.title("🎉 Activity Completed!")
+
+    st.balloons()
 
     st.success(
-        f"Your Score: {st.session_state.score} / 15"
+        f"Your Participation Score: "
+        f"{st.session_state.final_score}"
     )
-      
 
-    if st.session_state.score >= 13:
+    score = st.session_state.final_score
 
-        st.balloons()
+    if score >= 15:
 
         st.success(
-            "Excellent awareness! You are highly informed "
-            "about cyber safety and financial literacy. 🌟"
+            "🏅 Cyber Safety Champion!"
         )
 
-    elif st.session_state.score >= 8:
+        st.info(
+            "Excellent awareness about "
+            "financial safety and fraud prevention."
+        )
+
+    elif score >= 10:
 
         st.info(
-            "Good job! You have decent awareness, "
-            "but keep learning about cyber safety."
+            "🎯 Smart Financial Learner!"
+        )
+
+        st.write(
+            "You have good awareness and practical understanding."
         )
 
     else:
 
         st.warning(
-            "You should improve your awareness about "
-            "financial literacy and cyber fraud prevention."
+            "📘 Finance Explorer!"
         )
-        
+
+        st.write(
+            "Keep learning about digital safety and money management."
+        )
 
     st.info(
         "Together we can build a financially aware "
         "and cyber-safe India 🇮🇳"
     )
 
-    if st.button("🔄 Restart Quiz"):
+    if st.button("🔄 Restart Activity"):
 
         st.session_state.page = 1
+        st.session_state.final_score = 0
+
         st.rerun()
