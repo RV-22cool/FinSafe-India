@@ -60,28 +60,26 @@ if st.session_state.page == 1:
     st.subheader("Interactive Financial Literacy & Cyber Safety Activity")
 
     st.info(
-        "Learn about digital safety, fraud awareness, budgeting, "
-        "financial planning, and smart money habits."
+        "Learn about cyber safety, fraud awareness, "
+        "budgeting, and smart money habits."
     )
 
-    with st.container():
+    name = st.text_input("👤 Full Name")
 
-        name = st.text_input("👤 Full Name")
+    mobile = st.text_input("📱 Mobile Number")
 
-        mobile = st.text_input("📱 Mobile Number")
+    email = st.text_input("📧 Email Address")
 
-        email = st.text_input("📧 Email Address")
-
-        education = st.selectbox(
-            "🎓 Education Level",
-            [
-                "School Student",
-                "College Student",
-                "Graduate",
-                "Professional",
-                "Other"
-            ]
-        )
+    education = st.selectbox(
+        "🎓 Education Level",
+        [
+            "School Student",
+            "College Student",
+            "Graduate",
+            "Professional",
+            "Other"
+        ]
+    )
 
     st.progress(10)
 
@@ -114,6 +112,10 @@ elif st.session_state.page == 2:
 
     scam_score = 0
 
+    # =================================================
+    # CASE 1
+    # =================================================
+
     st.markdown("### 📩 Case 1")
 
     st.warning(
@@ -134,7 +136,8 @@ elif st.session_state.page == 2:
             "Unknown link",
             "KYC threat",
             "Official RBI notice"
-        ]
+        ],
+        key="red1"
     )
 
     action1 = st.text_area(
@@ -142,16 +145,38 @@ elif st.session_state.page == 2:
         key="action1"
     )
 
+    # Participation
     if c1:
+        scam_score += 0.5
+
+    # Correctness
+    if c1 == "Yes":
+        scam_score += 0.5
+
+    # Red Flags
+    if len(red1) >= 1:
+        scam_score += 0.5
+
+    correct_red1 = [
+        "Urgent pressure",
+        "Unknown link",
+        "KYC threat"
+    ]
+
+    correct_count1 = len(
+        set(red1).intersection(correct_red1)
+    )
+
+    if correct_count1 >= 2:
+        scam_score += 0.5
+
+    # Action Response
+    if len(action1.strip()) > 10:
         scam_score += 1
 
-    if len(red1) >= 2:
-        scam_score += 1
-
-    if len(action1) > 5:
-        scam_score += 1
-
-    # -------------------------------------------------
+    # =================================================
+    # CASE 2
+    # =================================================
 
     st.markdown("### ☎️ Case 2")
 
@@ -173,7 +198,8 @@ elif st.session_state.page == 2:
             "Advance payment request",
             "Unknown caller",
             "Official RBI message"
-        ]
+        ],
+        key="red2"
     )
 
     action2 = st.text_area(
@@ -181,16 +207,36 @@ elif st.session_state.page == 2:
         key="action2"
     )
 
+    # Participation
     if c2:
+        scam_score += 0.5
+
+    # Correctness
+    if c2 == "Yes":
+        scam_score += 0.5
+
+    # Red Flags
+    if len(red2) >= 1:
+        scam_score += 0.5
+
+    correct_red2 = [
+        "Lottery scam",
+        "Advance payment request",
+        "Unknown caller"
+    ]
+
+    correct_count2 = len(
+        set(red2).intersection(correct_red2)
+    )
+
+    if correct_count2 >= 2:
+        scam_score += 0.5
+
+    # Action
+    if len(action2.strip()) > 10:
         scam_score += 1
 
-    if len(red2) >= 2:
-        scam_score += 1
-
-    if len(action2) > 5:
-        scam_score += 1
-
-    # -------------------------------------------------
+    # =================================================
 
     if st.button("➡️ Next Section"):
 
@@ -216,15 +262,30 @@ elif st.session_state.page == 3:
         "Allocate your expenses wisely."
     )
 
-    rent = st.number_input("🏠 Rent / Stay", min_value=0)
+    rent = st.number_input(
+        "🏠 Rent / Stay",
+        min_value=0
+    )
 
-    food = st.number_input("🍛 Food", min_value=0)
+    food = st.number_input(
+        "🍛 Food",
+        min_value=0
+    )
 
-    entertainment = st.number_input("🎬 Entertainment", min_value=0)
+    entertainment = st.number_input(
+        "🎬 Entertainment",
+        min_value=0
+    )
 
-    savings = st.number_input("💸 Savings", min_value=0)
+    savings = st.number_input(
+        "💸 Savings",
+        min_value=0
+    )
 
-    emergency = st.number_input("🚨 Emergency Fund", min_value=0)
+    emergency = st.number_input(
+        "🚨 Emergency Fund",
+        min_value=0
+    )
 
     total = (
         rent
@@ -234,25 +295,35 @@ elif st.session_state.page == 3:
         + emergency
     )
 
-    st.write(f"### Total Used: ₹{total}")
+    st.write(f"### Total Budget Used: ₹{total}")
 
     if total > 15000:
 
-        st.error("⚠️ Budget exceeded!")
+        st.error("⚠️ You exceeded your monthly budget.")
 
     else:
 
         st.success("✅ Budget managed well!")
 
+    # Participation
+    if total > 0:
+        budget_score += 1
+
+    # Savings Logic
     if savings >= 3000:
-        budget_score += 2
+        budget_score += 1
         st.success("🏅 Smart Saver Badge Earned!")
 
+    # Emergency Fund
+    if emergency > 0:
+        budget_score += 1
+
+    # Financial Goal
     goal = st.text_input(
         "🎯 Write one financial goal"
     )
 
-    if len(goal) > 3:
+    if len(goal.strip()) > 5:
         budget_score += 1
 
     if st.button("➡️ Continue"):
@@ -274,9 +345,9 @@ elif st.session_state.page == 4:
 
     awareness_score = 0
 
-    # -------------------------------------------------
+    # =================================================
     # NEED VS WANT
-    # -------------------------------------------------
+    # =================================================
 
     st.subheader("🛒 Need vs Want")
 
@@ -298,18 +369,22 @@ elif st.session_state.page == 4:
         key="groceries_q"
     )
 
-    if rent_q:
-        awareness_score += 1
+    # Participation
+    awareness_score += 1.5
 
-    if iphone_q:
-        awareness_score += 1
+    # Correctness
+    if rent_q == "Need":
+        awareness_score += 0.5
 
-    if groceries_q:
-        awareness_score += 1
+    if iphone_q == "Want":
+        awareness_score += 0.5
 
-    # -------------------------------------------------
+    if groceries_q == "Need":
+        awareness_score += 0.5
+
+    # =================================================
     # RIGHT OR WRONG
-    # -------------------------------------------------
+    # =================================================
 
     st.subheader("✅ Right or Wrong")
 
@@ -331,18 +406,22 @@ elif st.session_state.page == 4:
         key="invest_q"
     )
 
-    if otp_q:
-        awareness_score += 1
+    # Participation
+    awareness_score += 1.5
 
-    if saving_q:
-        awareness_score += 1
+    # Correctness
+    if otp_q == "Wrong":
+        awareness_score += 0.5
 
-    if invest_q:
-        awareness_score += 1
+    if saving_q == "Right":
+        awareness_score += 0.5
 
-    # -------------------------------------------------
+    if invest_q == "Right":
+        awareness_score += 0.5
+
+    # =================================================
     # MATCH THE PAIR
-    # -------------------------------------------------
+    # =================================================
 
     st.subheader("🔗 Match the Pair")
 
@@ -364,13 +443,17 @@ elif st.session_state.page == 4:
         ]
     )
 
-    if sip:
-        awareness_score += 1
+    # Participation
+    awareness_score += 1
 
-    if sebi:
-        awareness_score += 1
+    # Correctness
+    if sip == "Regular Investment":
+        awareness_score += 0.5
 
-    # -------------------------------------------------
+    if sebi == "Market Regulator":
+        awareness_score += 0.5
+
+    # =================================================
 
     if st.button("➡️ Continue to Final Round"):
 
@@ -407,16 +490,17 @@ elif st.session_state.page == 5:
         "🧠 What is one step you take to stay safe online?"
     )
 
-    if len(q1) > 1:
+    # Participation-Based
+    if len(q1.strip()) > 1:
         rapid_score += 1
 
-    if len(q2) > 1:
+    if len(q2.strip()) > 1:
         rapid_score += 1
 
-    if len(q3) > 1:
+    if len(q3.strip()) > 1:
         rapid_score += 1
 
-    if len(reflection) > 5:
+    if len(reflection.strip()) > 10:
         rapid_score += 2
 
     # =================================================
@@ -432,20 +516,22 @@ elif st.session_state.page == 5:
             + rapid_score
         )
 
-        st.session_state.final_score = final_score
+        st.session_state.final_score = round(final_score, 1)
 
         # =============================================
         # TIMESTAMP
         # =============================================
 
-        ist = timezone(timedelta(hours=5, minutes=30))
+        ist = timezone(
+            timedelta(hours=5, minutes=30)
+        )
 
         timestamp = datetime.now(ist).strftime(
             "%Y-%m-%d %H:%M:%S"
         )
 
         # =============================================
-        # GOOGLE SHEET DATA
+        # SAVE TO GOOGLE SHEETS
         # =============================================
 
         data = [
@@ -458,7 +544,7 @@ elif st.session_state.page == 5:
             st.session_state.budget_score,
             st.session_state.awareness_score,
             rapid_score,
-            final_score,
+            st.session_state.final_score,
             reflection
         ]
 
@@ -469,7 +555,7 @@ elif st.session_state.page == 5:
         st.rerun()
 
 # =====================================================
-# PAGE 6 — FINAL RESULT
+# PAGE 6 — RESULT PAGE
 # =====================================================
 
 elif st.session_state.page == 6:
@@ -478,42 +564,41 @@ elif st.session_state.page == 6:
 
     st.balloons()
 
-    st.success(
-        f"Your Participation Score: "
-        f"{st.session_state.final_score}"
-    )
-
     score = st.session_state.final_score
 
-    if score >= 15:
+    st.success(
+        f"Your Final Participation Score: {score}"
+    )
 
-        st.success(
-            "🏅 Cyber Safety Champion!"
-        )
+    # =================================================
+    # BADGES
+    # =================================================
+
+    if score >= 16:
+
+        st.success("🏅 Cyber Safety Champion")
 
         st.info(
-            "Excellent awareness about "
-            "financial safety and fraud prevention."
+            "Excellent awareness about financial safety, "
+            "fraud prevention, and smart money habits."
         )
 
-    elif score >= 10:
+    elif score >= 11:
 
-        st.info(
-            "🎯 Smart Financial Learner!"
-        )
+        st.info("💰 Smart Financial Learner")
 
         st.write(
-            "You have good awareness and practical understanding."
+            "Good understanding of cyber awareness "
+            "and financial literacy."
         )
 
     else:
 
-        st.warning(
-            "📘 Finance Explorer!"
-        )
+        st.warning("📘 Finance Explorer")
 
         st.write(
-            "Keep learning about digital safety and money management."
+            "Keep learning about digital safety "
+            "and smart financial habits."
         )
 
     st.info(
@@ -521,9 +606,13 @@ elif st.session_state.page == 6:
         "and cyber-safe India 🇮🇳"
     )
 
+    # =================================================
+    # RESTART BUTTON
+    # =================================================
+
     if st.button("🔄 Restart Activity"):
 
-        st.session_state.page = 1
-        st.session_state.final_score = 0
+        for key in st.session_state.keys():
+            del st.session_state[key]
 
         st.rerun()
