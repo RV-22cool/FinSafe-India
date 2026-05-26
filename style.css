@@ -1,0 +1,84 @@
+body {
+    background-color: #f4f7fb;
+}
+
+/* Main App Container */
+.main {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 18px;
+}
+
+/* Main Title */
+h1 {
+    color: #003366;
+    text-align: center;
+    font-weight: 800;
+    font-size: 42px;
+}
+
+/* Section Headers */
+h2, h3 {
+    color: #004080;
+    font-weight: 700;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: #003366;
+    color: white;
+    border-radius: 12px;
+    height: 3.2em;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+}
+
+/* Button Hover Effect */
+.stButton > button:hover {
+    background-color: #0055aa;
+    color: white;
+}
+
+/* Text Input Boxes */
+.stTextInput > div > div > input {
+    border-radius: 10px;
+    border: 2px solid #cbd5e1;
+    padding: 10px;
+}
+
+/* Text Area */
+.stTextArea textarea {
+    border-radius: 10px;
+    border: 2px solid #cbd5e1;
+}
+
+/* Dropdown Boxes */
+.stSelectbox div[data-baseweb="select"] {
+    border-radius: 10px;
+}
+
+/* Radio Buttons */
+.stRadio {
+    background-color: #f8fafc;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Info Boxes */
+.stAlert {
+    border-radius: 12px;
+}
+
+/* Progress Bar */
+.stProgress > div > div > div > div {
+    background-color: #003366;
+}
+
+/* Footer Style */
+footer {
+    visibility: hidden;
+}
