@@ -548,7 +548,7 @@ elif st.session_state.page == 5:
             reflection
         ]
 
-        sheet.append_row(data)
+        sheet.append_row([data])
 
         st.session_state.page = 6
 
