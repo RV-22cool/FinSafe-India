@@ -292,9 +292,9 @@ elif st.session_state.page == 2:
 
     if st.button("✅ Submit Quiz"):
 
-      ist = pytz.timezone('Asia/Kolkata')
+ ist = pytz.timezone('Asia/Kolkata')
 timestamp = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
-        data = [
+  data = [
             st.session_state.name,
             st.session_state.mobile,
             st.session_state.email,
