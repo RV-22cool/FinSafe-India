@@ -258,7 +258,7 @@ elif st.session_state.page == 3:
     budget_score = 0
 
     st.info(
-        "You earn ₹15,000/month. "
+        "You earn ₹50,000/month. "
         "Allocate your expenses wisely."
     )
 
@@ -297,7 +297,7 @@ elif st.session_state.page == 3:
 
     st.write(f"### Total Budget Used: ₹{total}")
 
-    if total > 15000:
+    if total > 50000:
 
         st.error("⚠️ You exceeded your monthly budget.")
 
@@ -310,7 +310,7 @@ elif st.session_state.page == 3:
         budget_score += 1
 
     # Savings Logic
-    if savings >= 3000:
+    if savings >= 10000:
         budget_score += 1
         st.success("🏅 Smart Saver Badge Earned!")
 
