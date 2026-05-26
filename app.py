@@ -340,7 +340,7 @@ elif st.session_state.page == 3:
         f"Your Score: {st.session_state.score} / 15"
     )
     if st.button("🎓 Generate Certificate"):
-    cert_img = generate_certificate(
+       cert_img = generate_certificate(
         st.session_state.name,
         st.session_state.score
     )
