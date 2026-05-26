@@ -355,6 +355,7 @@ elif st.session_state.page == 3:
         file_name="FinSafe_Certificate.png",
         mime="image/png"
     )
+    )
 
     if st.session_state.score >= 13:
 
